@@ -20,7 +20,7 @@ const userSchema = new mongoose.Schema({
 
 userSchema.methods.sendNotification = function (message) {
   // Replace this with your logic to send notifications
-  console.log(`Sending notification to ${this.name} at ${this.mailID}: ${message}`);
+  console.log(`Sending notification to ${this.name} at ${this.email}: ${message}`);
 };
 
 const UserModel = mongoose.model("User", userSchema);

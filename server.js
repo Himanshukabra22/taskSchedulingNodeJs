@@ -5,7 +5,7 @@ const cors = require("cors");
 const bodyParser = require("body-parser");
 const dbconnect = require("./db/connection.js");
 const userAuth = require("./routes/userAuth.js")
-const {sendNotificationsAll} = require("./controllers/sendNotifications.js")
+const {sendNotificationsAll} = require("./controllers/sendNotificationsAll.js")
 require("dotenv").config();
 
 const user = require("./models/user.js")
