@@ -3,9 +3,15 @@ const fs = require("fs");
 const path = require("path")
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const schedule = require('node-schedule');
+// const moment = require('moment-timezone');
+const admin = require('firebase-admin');
+
 const dbconnect = require("./db/connection.js");
-const userAuth = require("./routes/userAuth.js")
+const userAuth = require("./routes/userauth.js")
 const {sendNotificationsAll} = require("./controllers/sendNotificationsAll.js")
+const serviceAccount = require('./serviceAccountKey.json');
+
 require("dotenv").config();
 
 const user = require("./models/user.js")
@@ -17,21 +23,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-
-// app.post("/",async (req,res) => {
-// try {
-//   const {name,email,password} = req.body
-//   let val = await user.create({name,email,password});
-//   if(val)
-//   {
-//       return res.status(200).json({
-//         message : "User data saved!"
-//       })
-// }
-// } catch (error) {
-//   return res.status(400).json({message : error});
-// }
-// })
+// Initialize Firebase Admin SDK with your service account key
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount),
+});
 
 app.use("/api/auth",userAuth)
 

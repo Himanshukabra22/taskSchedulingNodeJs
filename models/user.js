@@ -15,13 +15,17 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true,
   },
+  fcmToken : {
+    type : String,
+    required : true,
+    unique : true
+  },
   schedule: [scheduleSchema],
 });
 
-userSchema.methods.sendNotification = function (message) {
-  // Replace this with your logic to send notifications
-  console.log(`Sending notification to ${this.name} at ${this.email}: ${message}`);
-};
+// userSchema.methods.sendNotification =  (message) => {
+//   console.log(`Sending notification to ${this.name} at ${this.email}: ${message}`);
+// };
 
 const UserModel = mongoose.model("User", userSchema);
 

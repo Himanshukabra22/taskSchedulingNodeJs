@@ -1,4 +1,7 @@
 const schedule = require("node-schedule");
+const moment = require("moment-timezone");
+const {notifier} = require("./notifier")
+const {dayToDigit} = require("./dayToDigit")
 
 const cancelExistingJobs = (user) => {
   // Iterate through each existing job for the user and cancel it
@@ -19,18 +22,27 @@ const sendNotificationsForUser = async (user) => {
     const { day, timeSlots } = daySchedule;
 
     // Iterate through each time slot for the day
-    for (const timeSlot of timeSlots) {
-      // Create a cron expression for the scheduled time
-      const cronExpression = `${timeSlot.split(":")[1]} ${
-        timeSlot.split(":")[0]
-      } * * ${day}`;
+    for (const userTimeIST of timeSlots) {
+
+      // Convert to UTC and format into a cron expression
+      const cronExpression = `${userTimeIST.split(":")[1]} ${userTimeIST.split(":")[0]} * * ${dayToDigit(day)}`
+
+      console.log(cronExpression);
+
+      const userEntity = {
+        name : user.name,
+        email : user.email,
+        time : userTimeIST,
+        message : "Hello!!"
+      }
 
       // Schedule a job to send a notification at the specified time
       schedule.scheduleJob(
-        `user_${user._id}_${day}_${timeSlot}`, // Unique job name based on user, day, and timeSlot
+        `user_${user._id}_${day}_${userTimeIST}`, // Unique job name based on user, day, and timeSlot
         cronExpression,
         () => {
-          user.sendNotification(`It's time to clean at ${timeSlot}`);
+          console.log("Scheduler called!!");
+          notifier(userEntity);
         }
       );
     }

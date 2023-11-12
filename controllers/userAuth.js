@@ -1,9 +1,18 @@
 const asyncHandler = require("express-async-handler");
-const generateToken = require("../config/generateToken");
 const bcrypt = require("bcryptjs");
+const admin = require("firebase-admin");
+const crypto = require("crypto");
 
 const User = require("../models/user");
+const generateToken = require("../config/generateToken");
 const { sendNotificationsForUser } = require("./sendNotificationsUser");
+
+const generateCryptoString = (length) => {
+  return crypto
+    .randomBytes(Math.ceil(length / 2))
+    .toString("hex") // convert to hexadecimal format
+    .slice(0, length); // trim to desired length
+}
 
 const registerUser = async (req, res) => {
   try {
@@ -24,8 +33,19 @@ const registerUser = async (req, res) => {
 
     const encryptedPass = await bcrypt.hash(password, salt);
 
+    const registrationToken = generateCryptoString(32);
+
+    // console.log(registrationToken);
+
     // Create a new user (adjust the logic based on your requirements)
-    const newUser = new User({ name, email, password: encryptedPass });
+    const newUser = new User({
+      name,
+      email,
+      fcmToken: registrationToken,
+      password: encryptedPass,
+    });
+
+    await admin.messaging().subscribeToTopic(registrationToken, "/topics/event-notif");
 
     // Save the new user
     let user = await newUser.save();
@@ -73,9 +93,9 @@ const loginUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
   try {
-    if(!req.user)
-    return res.status(404).json({ error: "User not logged in." });
-  
+    if (!req.user)
+      return res.status(404).json({ error: "User not logged in." });
+
     const { _id: userId } = req.user;
 
     // Find the user by userId
@@ -105,7 +125,11 @@ const updateUser = async (req, res) => {
     await sendNotificationsForUser(upUser);
 
     if (upUser) {
-      res.status(200).json({ message: "User updated successfully" });
+      res
+        .status(200)
+        .json({
+          message: "User updated successfully and re-scheduling is done.",
+        });
     }
   } catch (error) {
     console.error("Error updating user:", error);
