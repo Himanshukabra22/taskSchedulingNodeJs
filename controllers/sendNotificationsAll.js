@@ -14,13 +14,13 @@ const sendNotificationsAll = async () => {
           const cronExpression = `${userTimeIST.split(":")[1]} ${
             userTimeIST.split(":")[0]
           } * * ${dayToDigit(day)}`;
-          console.log(cronExpression);
+          // console.log(cronExpression);
 
           const userEntity = {
             name: user.name,
             email: user.email,
             time: userTimeIST,
-            message: "Hello!!",
+            message: "Hello!!"
           };
 
           schedule.scheduleJob(cronExpression, () => {

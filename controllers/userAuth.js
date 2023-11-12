@@ -37,7 +37,7 @@ const registerUser = async (req, res) => {
 
     // console.log(registrationToken);
 
-    // Create a new user (adjust the logic based on your requirements)
+    // Create a new user
     const newUser = new User({
       name,
       email,

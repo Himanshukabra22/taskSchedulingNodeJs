@@ -4,7 +4,6 @@ const {notifier} = require("./notifier")
 const {dayToDigit} = require("./dayToDigit")
 
 const cancelExistingJobs = (user) => {
-  // Iterate through each existing job for the user and cancel it
   Object.values(schedule.scheduledJobs).forEach((job) => {
     console.log(job);
     if (job.name.startsWith(`user_${user._id}`)) {
@@ -14,6 +13,7 @@ const cancelExistingJobs = (user) => {
 };
 
 const sendNotificationsForUser = async (user) => {
+
   // Cancel existing jobs for the user's schedule
   cancelExistingJobs(user);
 
@@ -24,7 +24,6 @@ const sendNotificationsForUser = async (user) => {
     // Iterate through each time slot for the day
     for (const userTimeIST of timeSlots) {
 
-      // Convert to UTC and format into a cron expression
       const cronExpression = `${userTimeIST.split(":")[1]} ${userTimeIST.split(":")[0]} * * ${dayToDigit(day)}`
 
       console.log(cronExpression);
