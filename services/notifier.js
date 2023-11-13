@@ -1,6 +1,13 @@
 const User = require("../models/user");
 const admin = require('firebase-admin');
 
+var serviceAccount = require("../serviceAccountKey.json");
+
+admin.initializeApp({
+  credential: admin.credential.cert(serviceAccount)
+});
+
+
 const notifier = async ({name, email,time,message}) => {
   try {
 
@@ -12,7 +19,7 @@ const notifier = async ({name, email,time,message}) => {
     }
 
     const registrationToken = user.fcmToken;
-
+    console.log(registrationToken);
     const payload = {
       notification: {
         title: "Notification Title",

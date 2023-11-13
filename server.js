@@ -23,10 +23,10 @@ app.use(cors());
 app.use(bodyParser.json());
 app.use(express.json());
 
-// Initialize Firebase Admin SDK with your service account key
-admin.initializeApp({
-  credential: admin.credential.cert(serviceAccount),
-});
+// // Initialize Firebase Admin SDK with your service account key
+// admin.initializeApp({
+//   credential: admin.credential.cert(serviceAccount),
+// });
 
 app.use("/api/auth",userAuth)
 
