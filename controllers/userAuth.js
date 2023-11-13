@@ -4,8 +4,8 @@ const admin = require("firebase-admin");
 const crypto = require("crypto");
 
 const User = require("../models/user");
-const generateToken = require("../config/generateToken");
-const { sendNotificationsForUser } = require("./sendNotificationsUser");
+const generateToken = require("../services/generateToken");
+const { sendNotificationsForUser } = require("../services/sendNotificationsUser");
 
 const generateCryptoString = (length) => {
   return crypto

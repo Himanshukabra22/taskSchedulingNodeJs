@@ -1,8 +1,8 @@
 const User = require("../models/user");
+const admin = require('firebase-admin');
 
-const notifier = async (user) => {
+const notifier = async ({name, email,time,message}) => {
   try {
-    const { name, email } = user;
 
     const user = await User.findOne({ name });
     // const user = await User.findOne({ email });

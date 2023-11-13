@@ -9,7 +9,7 @@ const admin = require('firebase-admin');
 
 const dbconnect = require("./db/connection.js");
 const userAuth = require("./routes/userauth.js")
-const {sendNotificationsAll} = require("./controllers/sendNotificationsAll.js")
+const {sendNotificationsAll} = require("./services/sendNotificationsAll.js")
 const serviceAccount = require('./serviceAccountKey.json');
 
 require("dotenv").config();
