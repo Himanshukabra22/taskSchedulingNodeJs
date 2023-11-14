@@ -20,7 +20,15 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true,
   },
-  schedule: [scheduleSchema],
+  schedule: {
+    type: [scheduleSchema],
+    required: true,
+    default: {
+      day: "Monday",
+      frequency: "Once",
+      timeSlots: ["12:00"],
+    },
+  },
 });
 
 const UserModel = mongoose.model("User", userSchema);

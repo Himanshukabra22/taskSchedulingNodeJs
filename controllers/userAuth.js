@@ -23,9 +23,9 @@ const registerUser = async (req, res) => {
     }
 
     const emailExists = await User.findOne({ email });
-    const userExists = await User.findOne({ name });
+    // const userExists = await User.findOne({ name });
 
-    if (userExists || emailExists) {
+    if (emailExists) {
       return res.status(400).json({ message: "user already exists." });
     }
 
@@ -109,6 +109,15 @@ const updateUser = async (req, res) => {
 
     let updateFields = {};
     if (req.body.schedule) {
+      console.log(req.body.schedule);
+      for(const Schedule of req.body.schedule)
+      {
+        const {frequency,timeSlots} = Schedule;
+        if((frequency === "Twice" && timeSlots.length !== 2) || (frequency === "Once" && timeSlots.length !== 1))
+        {
+          return res.status(400).json({ error: "Error updating user: Wrong inputs." });
+        }
+      }
       updateFields.schedule = req.body.schedule;
     }
 
