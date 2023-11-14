@@ -110,12 +110,21 @@ const updateUser = async (req, res) => {
     let updateFields = {};
     if (req.body.schedule) {
       console.log(req.body.schedule);
+      const uniqueDays = new Set();
       for(const Schedule of req.body.schedule)
       {
-        const {frequency,timeSlots} = Schedule;
         if((frequency === "Twice" && timeSlots.length !== 2) || (frequency === "Once" && timeSlots.length !== 1))
         {
           return res.status(400).json({ error: "Error updating user: Wrong inputs." });
+        }
+        const {day, frequency,timeSlots} = Schedule;
+        if(uniqueDays.has(day))
+        {
+          return res.status(400).json({ error: "Error updating user: Wrong inputs. Please enter unique days." });
+        }
+        else
+        {
+          uniqueDays.add(day);
         }
       }
       updateFields.schedule = req.body.schedule;
